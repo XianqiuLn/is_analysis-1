@@ -7,60 +7,57 @@
 
 ### 1.1 类图PlantUML源码如下：
 
-``` @startuml
-阅读者信息<|--读者
-阅读者信息 :  name:String
-阅读者信息 :  id:String
-阅读者信息 :  sex:String
-阅读者信息 :  max_borrowbook:int
-阅读者信息 :  count:int
-读者 : id:String
-借书记录--读者
-借书记录 : 借书日期:Date
-借书记录 : 归还日期:Date
-逾期记录"0..1"--"1"借书记录
-逾期记录 : 逾期天数:String
-罚款细则"0..1"--"*"逾期记录 : "使用"
-借书记录"*"--"1"管理员 : "登记"
-管理员--|>阅读者信息
-管理员 : id:String
-管理员 : name:String
-借还书记录"*"--"1"阅读者信息
-借还书记录 : 书号:String
-借还书记录 : 书名:String
-借还书记录 : 作者:String
-借还书记录 : 出版社名:String
-借还书记录 : 出版日期:Date
-借还书记录 : 读者姓名:String
-借还书记录 : borrowdate:Date
-借还书记录 : due_date:Date
-借还书记录 : real_date:Date
-借还书记录 : getDate()
-借还书记录 : isOverDate()
-借还书记录 : opname()
-预约"*"--"1"阅读者信息
-预约 : 书名:String
-预约 : 作者:String
-预约 : 读者id:String
-预约 : 预约时间:Date
-预约 : 预约数量:int
-Copy_book"*"--"*"预约
-Copy_book : 书号:String
-Copy_book : 书名:String
-Copy_book : 出版号:String
-Copy_book : 出版日期:Date
-Copy_book : 作者:String
-Copy_book : 出版社名:String
+``` @startuml 
+User :  name:String
+User :  id:String
+User :  sex:String
+User :  max_borrowbook:int
+User :  count:int
+BorrowingRecords-- User
+BorrowingRecords : borrowingDate:Date
+BorrowingRecords : returnRecords:Date
+OverdueRrecords"0..1"--"1"BorrowingRecords
+OverdueRrecords : overdueTime:String
+BorrowingRecords"*"--"1"Admin : "Log"
+Admin--|>User
+Admin : id:String
+Admin : name:String
+RecordsOfBooksBR"*"--"1"User
+RecordsOfBooksBR : bookId:String
+RecordsOfBooksBR : bookName:String
+RecordsOfBooksBR : author:String
+RecordsOfBooksBR : pubisher:String
+RecordsOfBooksBR : publishDate:Date
+RecordsOfBooksBR : userId:String
+RecordsOfBooksBR : borrowdate:Date
+RecordsOfBooksBR : due_date:Date
+RecordsOfBooksBR : real_date:Date
+RecordsOfBooksBR : getDate()
+RecordsOfBooksBR : isOverDate()
+RecordsOfBooksBR : opname()
+Order"*"--"1"User
+Order : bookId:String
+Order : author:String
+Order : userId:String
+Order : orderTime:Date
+Order : orderCount:int
+Copy_book"*"--"*"Order
+Copy_book : bookId:String
+Copy_book : bookName:String
+Copy_book : publishNum:String
+Copy_book : publishDate:Date
+Copy_book : author:String
+Copy_book : pubisher:String
 Copy_book : count:int
-Copy_book"1"--"1"借还书记录
-Copy_book"*"--"1"book
-book : 书号:String
-book : 书名:String
-book : 出版号:String
-book : 出版日期:Date
-book : 出版社名:String
-book : 作者:String
-book : 数量:int
+Copy_book"1"--"1"RecordsOfBooksBR
+Copy_book"*"--"1"Book
+Book : bookId:String
+Book : bookName:String
+Book : publishNum:String
+Book : publishDate:Date
+Book : pubisher:String
+Book : author:String
+Book : count:int
 @enduml
 ```
 
@@ -69,6 +66,44 @@ book : 数量:int
 ![class](1.png)
 
 ### 1.3. 类图说明：
+Admin:管理员类
+
+User类:
+用户 :  name:String //姓名
+用户 :  ID:String //id
+用户 :  Sex:char  //性别
+用户 :  Max_borrowbook:int //最大借阅数
+用户 :  count:int   //借阅次数
+
+借还书记录:RecordsOfBooksBR
+RecordsOfBooksBR : bookId:String //书号
+RecordsOfBooksBR : bookName:String //书名
+RecordsOfBooksBR : author:String //作者
+RecordsOfBooksBR : pubisher:String //出版社名
+RecordsOfBooksBR : publishDate:Date //出版社名
+RecordsOfBooksBR : userId:String //用户ID
+RecordsOfBooksBR : borrowdate:Date //出版日期
+RecordsOfBooksBR : due_date:Date //预计归还
+RecordsOfBooksBR : real_date:Date //实际归回时间
+RecordsOfBooksBR : getDate() //获取日期
+RecordsOfBooksBR : isOverDate() //是否超时
+
+Order:预约
+Order : bookId:String //book的id
+Order : author:String //作者
+Order : userId:String //读者ID
+Order : orderTime:Date //预约时间
+Order : orderCount:int //预约数量
+
+Book:书
+Book : bookId:String //书号
+Book : bookName:String //书名
+Book : publishNum:String //出版号
+Book : publishDate:Date //出版日期
+Book : pubisher:String //出版社名
+Book : author:String //作者
+Book : count:int //数量
+
 主要的人员有用户和管理员，关系有借还书，预约等。
 管理员主要负责登记用户的各种信息。
 用户可以在系统上进行预约和借书等操作。
