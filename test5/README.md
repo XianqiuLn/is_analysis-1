@@ -63,7 +63,7 @@
 
 ```
 {
-    "user": "username，password",
+    "user": "username",
     "code": 200
 }
 ```
